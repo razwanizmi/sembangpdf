@@ -1,3 +1,4 @@
+import {chats, messages} from '@/lib/db/schema'
 import {neon, neonConfig} from '@neondatabase/serverless'
 import {drizzle} from 'drizzle-orm/neon-http'
 
@@ -9,4 +10,4 @@ if (!process.env.DATABASE_URL) {
 
 const sql = neon(process.env.DATABASE_URL)
 
-export const db = drizzle(sql)
+export const db = drizzle(sql, {schema: {chats, messages}})
