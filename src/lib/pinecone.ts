@@ -22,7 +22,6 @@ interface PdfPage {
 }
 
 export async function loadS3IntoPinecone(fileKey: string) {
-  console.log('Downloading S3 into file system')
   // Download PDF from S3
   const fileName = await downloadFromS3(fileKey)
 
@@ -42,7 +41,6 @@ export async function loadS3IntoPinecone(fileKey: string) {
 
   // Upload to Pinecone
   const pineconeIndex = pinecone.index(process.env.PINECONE_INDEX_NAME!)
-  console.log('Inserting vectors into Pinecone')
   pineconeIndex.upsert(vectors)
   return documents[0]
 }
@@ -61,7 +59,7 @@ async function embedDocument(doc: Document) {
       },
     } as PineconeRecord
   } catch (err) {
-    console.log('Error embedding document', err)
+    console.error('Error embedding document', err)
     throw err
   }
 }

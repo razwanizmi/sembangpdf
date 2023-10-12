@@ -23,17 +23,7 @@ export async function uploadToS3(file: File) {
       Body: file,
     }
 
-    await s3
-      .putObject(params)
-      .on('httpUploadProgress', event => {
-        console.log(
-          'Uploading to S3...',
-          parseInt(((event.loaded * 100) / event.total).toString()) + '%',
-        )
-      })
-      .promise()
-
-    console.log('Successfully oploaded to S3', fileKey)
+    await s3.putObject(params).promise()
 
     return Promise.resolve({fileKey, fileName: file.name})
   } catch (e) {}

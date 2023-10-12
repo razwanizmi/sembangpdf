@@ -13,7 +13,6 @@ export async function POST(req: Request, res: Response) {
 
   try {
     const {fileKey, fileName} = await req.json()
-    console.log({fileKey, fileName})
     await loadS3IntoPinecone(fileKey)
 
     const chatId = await db
@@ -28,7 +27,7 @@ export async function POST(req: Request, res: Response) {
 
     return NextResponse.json({chatId: chatId[0].insertedId}, {status: 200})
   } catch (err) {
-    console.error(err)
+    console.error('Error in api/create-chat/route', err)
     return NextResponse.json({error: 'Internal server error'}, {status: 500})
   }
 }

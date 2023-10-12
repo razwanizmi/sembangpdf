@@ -25,6 +25,6 @@ export async function downloadFromS3(fileKey: string) {
     fs.writeFileSync(fileName, object.Body as Buffer)
     return fileName
   } catch (err) {
-    console.error(err)
+    console.error('Error in downloadFromS3', err)
   }
 }

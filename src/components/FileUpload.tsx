@@ -31,31 +31,30 @@ export default function FileUpload() {
     maxFiles: 1,
     onDrop: async acceptedFiles => {
       setUploading(true)
-      console.log({acceptedFiles})
       const file = acceptedFiles[0]
+
       if (file.size > 10 * 1024 * 1024) {
         toast.error('File too large')
       } else {
         try {
           const data = await uploadToS3(file)
-          console.log({data})
+
           if (!data?.fileKey || !data?.fileName) {
             toast.error('Something went wrong')
           } else {
             mutate(data, {
               onSuccess: ({chatId}) => {
-                console.log(data)
                 toast.success('Chat created!')
                 router.push(`/chat/${chatId}`)
               },
-              onError: () => {
+              onError: err => {
                 toast.error('Error creating chat')
-                console.error(error)
+                console.error('Error mutation /api/create-chat', err)
               },
             })
           }
         } catch (err) {
-          console.log(err)
+          console.error('Error in onDrop', err)
         } finally {
           setUploading(false)
         }
