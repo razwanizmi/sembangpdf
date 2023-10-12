@@ -4,11 +4,13 @@ import {uploadToS3} from '@/lib/s3'
 import {useMutation} from '@tanstack/react-query'
 import axios from 'axios'
 import {Inbox, Loader2} from 'lucide-react'
+import {useRouter} from 'next/navigation'
 import React from 'react'
 import {useDropzone} from 'react-dropzone'
 import toast from 'react-hot-toast'
 
 export default function FileUpload() {
+  const router = useRouter()
   const [uploading, setUploading] = React.useState(false)
 
   const {mutate} = useMutation({
@@ -41,11 +43,14 @@ export default function FileUpload() {
             toast.error('Something went wrong')
           } else {
             mutate(data, {
-              onSuccess: data => {
-                toast.success(data.message)
+              onSuccess: ({chatId}) => {
+                console.log(data)
+                toast.success('Chat created!')
+                router.push(`/chat/${chatId}`)
               },
               onError: () => {
                 toast.error('Error creating chat')
+                console.error(error)
               },
             })
           }
