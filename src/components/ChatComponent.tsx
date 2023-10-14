@@ -6,9 +6,14 @@ import {useChat} from 'ai/react'
 import {Send} from 'lucide-react'
 import MessageList from './MessageList'
 
-export default function ChatComponent() {
+interface Props {
+  chatId: number
+}
+
+export default function ChatComponent({chatId}: Props) {
   const {input, handleInputChange, handleSubmit, messages} = useChat({
     api: '/api/chat',
+    body: {chatId},
   })
 
   return (

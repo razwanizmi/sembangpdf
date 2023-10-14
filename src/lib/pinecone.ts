@@ -9,11 +9,6 @@ import md5 from 'md5'
 import {getEmbeddings} from './embeddings'
 import {convertToAscii} from './utils'
 
-export const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY!,
-  environment: process.env.PINECONE_ENVIRONMENT!,
-})
-
 interface PdfPage {
   pageContent: string
   metadata: {
@@ -40,6 +35,11 @@ export async function loadS3IntoPinecone(fileKey: string) {
   const vectors = await Promise.all(documents.flat().map(embedDocument))
 
   // Upload to Pinecone
+  const pinecone = new Pinecone({
+    apiKey: process.env.PINECONE_API_KEY!,
+    environment: process.env.PINECONE_ENVIRONMENT!,
+  })
+
   const pineconeIndex = pinecone.index(process.env.PINECONE_INDEX_NAME!)
   pineconeIndex.upsert(vectors)
   return documents[0]

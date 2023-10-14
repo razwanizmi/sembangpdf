@@ -4,7 +4,7 @@ import PdfViewer from '@/components/PdfViewer'
 import {db} from '@/lib/db'
 import {chats} from '@/lib/db/schema'
 import {auth} from '@clerk/nextjs/server'
-import {and, eq} from 'drizzle-orm'
+import {eq} from 'drizzle-orm'
 import {redirect} from 'next/navigation'
 
 interface Props {
@@ -19,11 +19,6 @@ export default async function ChatPage({params: {chatId}}: Props) {
   if (!userId) {
     return redirect('/sign-in')
   }
-
-  // const userChats = await db
-  //   .select()
-  //   .from(chats)
-  //   .where(and(eq(chats.id, parseInt(chatId)), eq(chats.userId, userId)))
 
   const userChats = await db.query.chats.findMany({
     where: eq(chats.userId, userId),
@@ -45,7 +40,7 @@ export default async function ChatPage({params: {chatId}}: Props) {
           <PdfViewer pdfUrl={currentChat.pdfUrl} />
         </div>
         <div className="flex-[3] border-l-4 border-l-slate-200">
-          <ChatComponent />
+          <ChatComponent chatId={parseInt(chatId)} />
         </div>
       </div>
     </div>
